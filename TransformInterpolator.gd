@@ -5,6 +5,9 @@ class_name TransformInterpolator extends Node
 @export var look_at_speed := 5.0
 @export var reset_delay := 1.0
 
+signal resetted
+signal walked
+
 var reset_transform: Transform3D
 
 func SetReset(itemNode: Node3D) -> void:
@@ -31,9 +34,12 @@ func WalkTo(direction = Vector3.FORWARD, duration = 1.5) -> void:
 		return
 	
 	var t = from.create_tween() as Tween
-	t.tween_property(from, "global_position", to.global_position - direction, duration)
+	t.tween_property(from, "position", to.position - direction, duration)
 	t.set_ease(Tween.EASE_IN_OUT)
 	t.play()
+	
+	await t.finished
+	walked.emit()
 
 func Reset(interpolateTime := 0.5) -> void:
 	if not from:
@@ -42,8 +48,11 @@ func Reset(interpolateTime := 0.5) -> void:
 	var x = from.transform.interpolate_with(reset_transform, reset_delay)
 	var t = from.create_tween() as Tween
 	t.tween_property(from, "transform", x, interpolateTime)
-	t.set_ease(Tween.EASE_OUT_IN)
+	t.set_ease(Tween.EASE_IN_OUT)
 	t.play()
+	
+	await t.finished
+	resetted.emit()
 
 func _process(delta):
 	if not from:
@@ -52,6 +61,6 @@ func _process(delta):
 	if not to:
 		return
 	
-	var x = from.global_transform.looking_at(to.global_position)
-	var y = from.global_transform.interpolate_with(x, look_at_speed * delta)
-	from.global_transform = y
+	var x = from.transform.looking_at(to.position)
+	var y = from.transform.interpolate_with(x, look_at_speed * delta)
+	from.transform = y
