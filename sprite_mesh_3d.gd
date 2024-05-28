@@ -12,40 +12,6 @@ func set_size(size : float) -> void:
 	pixel_size = size
 	gen_mesh()
 
-func gen_voxel(color : Color, position : Vector2) -> Dictionary:
-	var data = {
-		"positions": {},
-		"normals": [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT],
-		"color": color,
-		"indices": [0, 4, 8, 12]
-	}
-	
-	data["positions"][Vector3.FORWARD] = []
-	data["positions"][Vector3.FORWARD].append(Vector3(0, 0, 0))
-	data["positions"][Vector3.FORWARD].append(Vector3(1, 0, 0))
-	data["positions"][Vector3.FORWARD].append(Vector3(1, 1, 0))
-	data["positions"][Vector3.FORWARD].append(Vector3(0, 1, 0))
-	
-	data["positions"][Vector3.BACK] = []
-	data["positions"][Vector3.BACK].append(Vector3(0, 0, 1))
-	data["positions"][Vector3.BACK].append(Vector3(1, 0, 1))
-	data["positions"][Vector3.BACK].append(Vector3(1, 1, 1))
-	data["positions"][Vector3.BACK].append(Vector3(0, 1, 1))
-	
-	data["positions"][Vector3.LEFT] = []
-	data["positions"][Vector3.LEFT].append(Vector3(0, 0, 0))
-	data["positions"][Vector3.LEFT].append(Vector3(0, 1, 0))
-	data["positions"][Vector3.LEFT].append(Vector3(0, 1, 1))
-	data["positions"][Vector3.LEFT].append(Vector3(0, 0, 1))
-	
-	data["positions"][Vector3.RIGHT] = []
-	data["positions"][Vector3.RIGHT].append(Vector3(1, 0, 0))
-	data["positions"][Vector3.RIGHT].append(Vector3(1, 1, 0))
-	data["positions"][Vector3.RIGHT].append(Vector3(1, 1, 1))
-	data["positions"][Vector3.RIGHT].append(Vector3(1, 0, 1))
-	
-	return data
-
 func gen_mesh():
 	clear_surfaces()
 	var data : Array
